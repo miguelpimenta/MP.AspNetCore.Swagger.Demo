@@ -1,39 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MP.AspNetCore.Swagger.Demo.V1.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using MP.AspNetCore.Swagger.Demo.V2.Models;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace MP.AspNetCore.Swagger.Demo.V1.Controllers
+namespace MP.AspNetCore.Swagger.Demo.V2.Controllers
 {
     [ApiController]
-    [ApiVersion("1.0", Deprecated = true)]
-    [ApiVersion("1.5", Deprecated = true)]
+    [ApiVersion("2.0", Deprecated = true)]
     [Produces("Application/json")]
     [Route("api/v{version:apiVersion}/[controller]")]
     public class TestController : ControllerBase
     {
         /// <summary>
-        /// Test.
+        /// Echo test.
         /// </summary>
         /// <returns>Something...</returns>
+        [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [MapToApiVersion("1.0")]
-        [HttpGet("/test1")]
-        public IActionResult Get1()
+        [HttpGet("test/{input}")]
+        public IActionResult Get()
         {
-            return Ok("Ok from Version 1.0");
-        }
-
-        /// <summary>
-        /// Test.
-        /// </summary>
-        /// <returns>Something...</returns>
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [MapToApiVersion("1.5")]
-        [HttpGet("/test2")]
-        public IActionResult Get2()
-        {
-            return Ok("Ok from Version 1.5");
+            return Ok("Ok from Version 2.0");
         }
 
         /// <summary>
@@ -45,22 +33,25 @@ namespace MP.AspNetCore.Swagger.Demo.V1.Controllers
         /// <response code="400">Error....</response>
         /// <response code="401">Authorization has been denied for this request</response>
         /// <response code="500">Sometimes things don't work as supposed...</response>
+        /// <response code="501">Not implemented</response>
+        [AllowAnonymous]
+        [Consumes("Application/json")]
         [ProducesResponseType(typeof(TestResp), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(string[]), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ProducesResponseType((int)HttpStatusCode.NotImplemented)]
-        [HttpGet("test/{input}")]
-        public async Task<IActionResult> Test([FromRoute] int input)
+        [HttpGet("{input}"), ActionName("Test")]
+        public async Task<IActionResult> Test([FromBody] TestReq input)
         {
-            switch (input)
+            switch (input.Id)
             {
                 case 1:
                     var resp = new TestResp
                     {
                         Id = 1,
-                        Info = "Echo from controller version 1.X"
+                        Info = "Echo from controller version 1.5"
                     };
 
                     return Ok(resp);
