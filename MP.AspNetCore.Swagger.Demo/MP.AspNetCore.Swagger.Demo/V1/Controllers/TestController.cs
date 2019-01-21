@@ -18,10 +18,10 @@ namespace MP.AspNetCore.Swagger.Demo.V1.Controllers
         /// <returns>Something...</returns>
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [MapToApiVersion("1.0")]
-        [HttpGet("/test1")]
+        [HttpGet("test1")]
         public IActionResult Get1()
         {
-            return Ok("Ok from Version 1.0");
+            return Ok("Ok from controller version 1.0");
         }
 
         /// <summary>
@@ -30,10 +30,10 @@ namespace MP.AspNetCore.Swagger.Demo.V1.Controllers
         /// <returns>Something...</returns>
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [MapToApiVersion("1.5")]
-        [HttpGet("/test2")]
+        [HttpGet("test2")]
         public IActionResult Get2()
         {
-            return Ok("Ok from Version 1.5");
+            return Ok("Ok from controller version 1.5");
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace MP.AspNetCore.Swagger.Demo.V1.Controllers
                     var resp = new TestResp
                     {
                         Id = 1,
-                        Info = "Echo from controller version 1.X"
+                        Info = "Ok from controller version 1.X"
                     };
 
                     return Ok(resp);

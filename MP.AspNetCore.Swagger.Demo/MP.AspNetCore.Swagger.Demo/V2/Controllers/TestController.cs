@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MP.AspNetCore.Swagger.Demo.V2.Controllers
 {
     [ApiController]
-    [ApiVersion("2.0", Deprecated = true)]
+    [ApiVersion("2.0")]
     [Produces("Application/json")]
     [Route("api/v{version:apiVersion}/[controller]")]
     public class TestController : ControllerBase
@@ -18,16 +18,25 @@ namespace MP.AspNetCore.Swagger.Demo.V2.Controllers
         /// <returns>Something...</returns>
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [HttpGet("test/{input}")]
+        [HttpGet("test")]
         public IActionResult Get()
         {
-            return Ok("Ok from Version 2.0");
+            return Ok("Ok from controller version 2.0");
         }
 
         /// <summary>
         /// Testing...
         /// </summary>
         /// <param name="input"></param>
+        /// <remarks>
+        /// <para>Example request:</para>
+        /// <para>
+        /// {
+        ///     "id": 1,
+        ///     "msg": "Test Msg...",
+        /// }
+        /// </para>
+        /// </remarks>
         /// <returns>Something...</returns>
         /// <response code="200">Ok</response>
         /// <response code="400">Error....</response>
@@ -42,7 +51,7 @@ namespace MP.AspNetCore.Swagger.Demo.V2.Controllers
         [ProducesResponseType(typeof(string[]), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ProducesResponseType((int)HttpStatusCode.NotImplemented)]
-        [HttpGet("{input}"), ActionName("Test")]
+        [HttpPost, ActionName("Test")]
         public async Task<IActionResult> Test([FromBody] TestReq input)
         {
             switch (input.Id)
@@ -51,7 +60,7 @@ namespace MP.AspNetCore.Swagger.Demo.V2.Controllers
                     var resp = new TestResp
                     {
                         Id = 1,
-                        Info = "Echo from controller version 1.5"
+                        Info = $"The Msg from request is: {input.Msg.ToUpper()}"
                     };
 
                     return Ok(resp);
