@@ -14,7 +14,7 @@ namespace MP.AspNetCore.Swagger.Demo.Swagger
         {
             services.AddSwaggerGen(options =>
             {
-                options.SchemaFilter<SwaggerExcludePropertiesFilter>();
+                //options.SchemaFilter<SwaggerExcludePropertiesFilter>();
                 //options.OperationFilter<SwaggerDefaultValues>();
 
                 // Resolve the temporary IApiVersionDescriptionProvider service
@@ -27,9 +27,9 @@ namespace MP.AspNetCore.Swagger.Demo.Swagger
                 }
 
                 var security = new Dictionary<string, IEnumerable<string>>
-                    {
+                {
                     {"Bearer", new string[] { }},
-                    };
+                };
                 options.AddSecurityRequirement(security);
 
                 // Bearer/Token
